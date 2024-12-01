@@ -5,6 +5,28 @@
 #include <string>
 #include <vector>
 
+int calculate_total_distance(std::vector<int> left, std::vector<int> right) {
+    std::sort(left.begin(), left.end());
+    std::sort(right.begin(), right.end());
+
+    int sum = 0;
+    for(int idx = 0; idx < left.size(); idx++) {
+        sum += std::abs(left[idx] - right[idx]);
+    }
+    return sum;
+}
+
+int calculate_similarity(std::vector<int> left, std::vector<int> right) {
+    std::sort(left.begin(), left.end());
+    std::sort(right.begin(), right.end());
+
+    int sum = 0;
+    for(int number : left) {
+        sum += number * std::count(right.begin(), right.end(), number);
+    }
+    return sum;
+}
+
 int main(int argc, char **argv)
 {
     std::ifstream input_file;
@@ -34,20 +56,9 @@ int main(int argc, char **argv)
 
     assert(left.size() == right.size());
 
-    // Calculate task 1(Difference)
-    std::sort(left.begin(), left.end());
-    std::sort(right.begin(), right.end());
+    int total_distance = calculate_total_distance(left, right);
+    std::cout << "Total distance between lists: " << total_distance << "\n";
 
-    int sum = 0;
-    for(int idx = 0; idx < left.size(); idx++) {
-        sum += std::abs(left[idx] - right[idx]);
-    }
-    std::cout << "Total distance between lists: " << sum << "\n";
-
-    // Calculate task 2(Similarity)
-    sum = 0;
-    for(int number : left) {
-        sum += number * std::count(right.begin(), right.end(), number);
-    }
-    std::cout << "Similarity score: " << sum << "\n";
+    int similarity = calculate_similarity(left, right);
+    std::cout << "Similarity score: " << similarity << "\n";
 }
