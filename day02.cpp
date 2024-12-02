@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <functional>
 #include <iostream>
@@ -25,6 +27,7 @@ bool checkReport(const std::vector<int>& report, std::vector<std::function<bool(
     return true;
 }
 
+// ===== Task 01 =====
 bool allIncreasingOrAllDecreasing(const std::vector<int>& report){
     // Nothing to check if 0 or 1 elements
     if (report.size() <= 1) {
@@ -83,20 +86,42 @@ bool adjacentLevelsDifferByAtMost(const std::vector<int>& report, int max) {
     return true;
 }
 
-// Task 1
-int totalSafeReports(const std::vector<std::vector<int>>& reports){
+bool isReportSafe(const std::vector<int>& report){
     using namespace std::placeholders;
     const static std::vector<std::function<bool(const std::vector<int>&)>> conditions {
         allIncreasingOrAllDecreasing,
         std::bind(adjacentLevelsDifferByAtLeast, _1, 1),
         std::bind(adjacentLevelsDifferByAtMost, _1, 3)    
     };
-    
-    int sum = 0;
-    for(const auto& report : reports) {
-        sum += checkReport(report, conditions) ? 1 : 0;
+    return checkReport(report, conditions);
+}
+
+int totalSafeReports(const std::vector<std::vector<int>>& reports){
+    return std::count_if(
+        reports.begin(),
+        reports.end(),
+        isReportSafe
+    ); 
+}
+
+// ===== Task 2 =====
+bool isReportSafeWithProblemDampener(const std::vector<int>& report) {
+    for(int idx = 0; idx < report.size(); ++idx) {
+        auto report_copy = report;
+        report_copy.erase(report_copy.begin() + idx);
+        if(isReportSafe(report_copy)) {
+            return true;
+        }
     }
-    return sum;
+    return false;
+}
+
+int totalSafeReportsWithDampener(const std::vector<std::vector<int>>& reports) {
+    return std::count_if(
+        reports.begin(),
+        reports.end(),
+        isReportSafeWithProblemDampener
+    );    
 }
 
 int main(int argc, char **argv)
@@ -121,6 +146,11 @@ int main(int argc, char **argv)
         reports.push_back(readReport(line));
     }
 
+    // Task 1
     int safe_reports = totalSafeReports(reports);
     std::cout << "Total Safe Reports: " << safe_reports << "\n";
+
+    // Task 2
+    int safe_reports_with_problem_dampener = totalSafeReportsWithDampener(reports);
+    std::cout << "Total Safe Reports with problem dampener: " << safe_reports_with_problem_dampener << "\n";
 }
