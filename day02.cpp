@@ -129,6 +129,7 @@ int main(int argc, char **argv)
     std::ifstream input_file;
     if(argc < 2){
         std::cout << "Not enough arguments! " << "\n";
+        return 0;
     }
 
     // First argument is input file location
@@ -136,7 +137,7 @@ int main(int argc, char **argv)
     if(!input_file.is_open())
     {
         std::cerr << "Unable to open file." << std::endl;
-        return(0);
+        return 0;
     }
 
     // Read input
