@@ -101,28 +101,31 @@ reduce_page_ordering_rules(const std::vector<std::pair<int, int>> &rules) {
   return page_to_forbidden_pages;
 }
 
-bool is_in_correct_order(const std::vector<int> &page_order,
-                         const std::map<int, std::set<int>> &page_to_forbidden_pages) {
+bool is_in_correct_order(
+    const std::vector<int> &page_order,
+    const std::map<int, std::set<int>> &page_to_forbidden_pages) {
   std::set<int> forbidden_pages{};
-  
+
   for (const auto &page : page_order) {
     if (forbidden_pages.contains(page)) {
-      return false; 
+      return false;
     }
     try {
       std::set<int> at = page_to_forbidden_pages.at(page);
-      std::ranges::for_each(at, [&](const auto& a){forbidden_pages.insert(a);});
-    }
-    catch(const std::out_of_range& e){} // Page not in map? No problem!
+      std::ranges::for_each(at,
+                            [&](const auto &a) { forbidden_pages.insert(a); });
+    } catch (const std::out_of_range &e) {
+    } // Page not in map? No problem!
   }
   return true;
 }
 
-int get_sum_of_middle_pages(const PrintInstructions& print_instructions) {
-  const auto reduced_rules = reduce_page_ordering_rules(print_instructions.page_ordering_rules);
+int get_sum_of_middle_pages(const PrintInstructions &print_instructions) {
+  const auto reduced_rules =
+      reduce_page_ordering_rules(print_instructions.page_ordering_rules);
   int sum = 0;
-  for(const auto& print_order : print_instructions.updates) {
-    if(is_in_correct_order(print_order, reduced_rules)){
+  for (const auto &print_order : print_instructions.updates) {
+    if (is_in_correct_order(print_order, reduced_rules)) {
       sum += print_order[print_order.size() / 2];
     }
   }
@@ -131,29 +134,44 @@ int get_sum_of_middle_pages(const PrintInstructions& print_instructions) {
 
 // ===== Task 2 =====
 
-void reorder_print_order(std::vector<int>& print_order, const std::map<int, std::set<int>>& reduced_rules) {
-  std::vector<std::pair<int, std::set<int>>> update_order;
-  std::set<int> forbidden_pages{};
-  std::vector<int> pages_to_reinsert{};
-  
+void reorder_print_order(std::vector<int> &print_order,
+                         const std::map<int, std::set<int>> &reduced_rules) {
+  std::vector<int> updated_order{};
+  std::vector<std::set<int>> insert_before{};
+
   for (const auto &page : print_order) {
-    if (forbidden_pages.contains(page)) {
-      pages_to_reinsert.push_back(page); 
-    }
+    // Get Rules for current page page
+    std::set<int> rules_for_page{};
     try {
-      std::set<int> at = reduced_rules.at(page);
-      std::ranges::for_each(at, [&](const auto& a){forbidden_pages.insert(a);});
+      rules_for_page = reduced_rules.at(page);
+    } catch (const std::out_of_range &e) {
+    } // Page not in map? No problem!
+
+    bool is_inserted = false;
+    for (int i = 0; i < insert_before.size(); ++i) {
+      if (insert_before[i].contains(page)) {
+        insert_before.insert(insert_before.begin() + i, rules_for_page);
+        updated_order.insert(updated_order.begin() + i, page);
+        is_inserted = true;
+        break;
+      }
     }
-    catch(const std::out_of_range& e){} // Page not in map? No problem!
+    if (!is_inserted) {
+      insert_before.push_back(rules_for_page);
+      updated_order.push_back(page);
+    }
   }
+  print_order = updated_order;
 }
 
-int get_sum_of_reordered_middle_pages(const PrintInstructions& print_instructions) {
-  const auto reduced_rules = reduce_page_ordering_rules(print_instructions.page_ordering_rules);
-  
+int get_sum_of_reordered_middle_pages(
+    const PrintInstructions &print_instructions) {
+  const auto reduced_rules =
+      reduce_page_ordering_rules(print_instructions.page_ordering_rules);
+
   int sum = 0;
-  for(auto print_order : print_instructions.updates) {
-    if(is_in_correct_order(print_order, reduced_rules)){
+  for (auto print_order : print_instructions.updates) {
+    if (is_in_correct_order(print_order, reduced_rules)) {
       continue;
     }
     reorder_print_order(print_order, reduced_rules);
@@ -175,6 +193,8 @@ int main(int argc, char **argv) {
   int sum_of_middle_pages = get_sum_of_middle_pages(print_instructions);
   std::cout << "Sum of middle pages: " << sum_of_middle_pages << "\n";
   // Task 2 :
-
-  // Test: C++ Ranges and Views
+  int sum_of_reordered_middle_pages =
+      get_sum_of_reordered_middle_pages(print_instructions);
+  std::cout << "Sum of reordered middle pages: "
+            << sum_of_reordered_middle_pages << "\n";
 }
