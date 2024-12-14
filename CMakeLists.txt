@@ -16,4 +16,5 @@ add_executable(day05 day05.cpp)
 
 add_executable(day11 day11.cpp)
 add_executable(day12 day12.cpp)
+target_link_libraries(day12 array2d)
 add_executable(day13 day13.cpp)
