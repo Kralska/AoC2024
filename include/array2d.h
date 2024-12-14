@@ -22,7 +22,7 @@ public:
   }
 
   T &at(std::size_t x, std::size_t y);
-  const T &at(int x, int y) const;
+  const T &cat(std::size_t x, std::size_t y) const;
   const std::size_t &height() const;
   const std::size_t &length() const;
 
