@@ -8,19 +8,9 @@
 #include <string>
 
 #include "array2d.h"
+#include "point.h"
 
 using Farm = Array2D::Array2D<char>;
-
-struct Point {
-  std::size_t x, y;
-  Point(std::size_t x, std::size_t y) : x(x), y(y) {}
-
-  auto operator<=>(const Point &) const = default;
-};
-std::ostream &operator<<(std::ostream &os, Point p) {
-  os << "(" << p.x << ", " << p.y << ")";
-  return os;
-}
 
 template <class T>
 std::ostream &operator<<(std::ostream &os, const std::set<T> &set) {
@@ -31,14 +21,15 @@ std::ostream &operator<<(std::ostream &os, const std::set<T> &set) {
 }
 
 // ===== Task 1 =====
-using Region = std::set<Point>;
+using Region = std::set<Point::Point>;
 
-Region get_region(Point start, const Farm &farm) {
-  std::deque<Point> queue{start};
+
+Region get_region(Point::Point start, const Farm &farm) {
+  std::deque<Point::Point> queue{start};
   Region region{};
   const char plant = farm.at(start.x, start.y);
   while (!queue.empty()) {
-    Point current = queue.back();
+    Point::Point current = queue.back();
     queue.pop_back();
 
     // Is plot correct plant type?
@@ -112,7 +103,7 @@ int calculate_sides(const Region& region){
     // if it is in a side at all
     // UP, RIGHT, DOWN, LEFT
     const int UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3;
-    std::map<Point, std::array<bool, 4>> is_in_side;
+    std::map<Point::Point, std::array<bool, 4>> is_in_side;
     std::ranges::for_each(region, [&](const auto& val){is_in_side[val] = {false, false, false, false};});
     
     int sides = 0;
@@ -125,7 +116,7 @@ int calculate_sides(const Region& region){
             is_in_side[point][UP] = true;
             // Check right
             int offset = 1;
-            Point offset_point {point.x + offset, point.y }, offset_adjacent_point {point.x + offset, point.y - 1};
+            Point::Point offset_point {point.x + offset, point.y }, offset_adjacent_point {point.x + offset, point.y - 1};
             while(region.contains(offset_point) && !region.contains(offset_adjacent_point)) {
                 is_in_side[offset_point][UP] = true;
                 ++offset;
@@ -153,7 +144,7 @@ int calculate_sides(const Region& region){
             is_in_side[point][DOWN] = true;
             // Check right
             int offset = 1;
-            Point offset_point {point.x + offset, point.y }, offset_adjacent_point {point.x + offset, point.y + 1};
+            Point::Point offset_point {point.x + offset, point.y }, offset_adjacent_point {point.x + offset, point.y + 1};
             while(region.contains(offset_point) && !region.contains(offset_adjacent_point)) {
                 is_in_side[offset_point][DOWN] = true;
                 ++offset;
@@ -180,7 +171,7 @@ int calculate_sides(const Region& region){
             is_in_side[point][RIGHT] = true;
             // Check down
             int offset = 1;
-            Point offset_point {point.x , point.y + offset }, offset_adjacent_point {point.x + 1, point.y + offset};
+            Point::Point offset_point {point.x , point.y + offset }, offset_adjacent_point {point.x + 1, point.y + offset};
             while(region.contains(offset_point) && !region.contains(offset_adjacent_point)) {
                 is_in_side[offset_point][RIGHT] = true;
                 ++offset;
@@ -208,7 +199,7 @@ int calculate_sides(const Region& region){
             is_in_side[point][LEFT] = true;
             // Check down
             int offset = 1;
-            Point offset_point {point.x , point.y + offset }, offset_adjacent_point {point.x - 1, point.y + offset};
+            Point::Point offset_point {point.x , point.y + offset }, offset_adjacent_point {point.x - 1, point.y + offset};
             while(region.contains(offset_point) && !region.contains(offset_adjacent_point)) {
                 is_in_side[offset_point][LEFT] = true;
                 ++offset;
