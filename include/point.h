@@ -1,13 +1,12 @@
 #ifndef _POINT_H_
 #define _POINT_H_
 
-#include <cstddef>
 #include <ostream>
 namespace Point {
 
 struct Point {
-  std::size_t x, y;
-  Point(std::size_t x, std::size_t y) : x(x), y(y) {}
+  int x, y;
+  Point(int x, int y) : x(x), y(y) {}
 
   auto operator<=>(const Point &) const = default;
 };
