@@ -9,6 +9,9 @@ struct Vector {
   Vector(int x, int y) : x(x), y(y) {}
 
   auto operator<=>(const Vector &) const = default;
+
+  Vector operator+(const Vector&) const;
+  Vector& operator+=(const Vector&);
 };
 
 }
