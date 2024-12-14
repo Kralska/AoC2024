@@ -16,7 +16,7 @@ Array2D::Array2D<T>::Array2D(std::size_t length, std::size_t height,
 template <class T> T &Array2D::Array2D<T>::at(std::size_t x, std::size_t y) {
   return vec_.at(y * length_ + x);
 }
-template <class T> const T &Array2D::Array2D<T>::at(int x, int y) const {
+template <class T> const T & Array2D::Array2D<T>::cat(std::size_t x, std::size_t y) const {
   return vec_[y * length_ + x];
 }
 template <class T> const std::size_t &Array2D::Array2D<T>::height() const {
@@ -29,7 +29,7 @@ template <class T> const std::size_t &Array2D::Array2D<T>::length() const {
 template <class T> void Array2D::print_array(const Array2D<T> &arr){
     for (int y = 0; y < arr.height(); ++y) {
     for (int x = 0; x < arr.length(); ++x) {
-      std::cout << arr.at(x, y);
+      std::cout << arr.cat(x, y);
     }
     std::cout << "\n";
   }
