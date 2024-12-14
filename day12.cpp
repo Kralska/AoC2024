@@ -27,13 +27,13 @@ using Region = std::set<Point::Point>;
 Region get_region(Point::Point start, const Farm &farm) {
   std::deque<Point::Point> queue{start};
   Region region{};
-  const char plant = farm.at(start.x, start.y);
+  const char plant = farm.cat(start.x, start.y);
   while (!queue.empty()) {
     Point::Point current = queue.back();
     queue.pop_back();
 
     // Is plot correct plant type?
-    if (farm.at(current.x, current.y) != plant) {
+    if (farm.cat(current.x, current.y) != plant) {
       continue;
     }
     // Plot already in region?
@@ -81,8 +81,8 @@ int calculate_circumference(const Region &region) {
 int get_cost_of_fences(const Farm &farm) {
   int sum = 0;
   Array2D::Array2D<int> is_in_region{farm.length(), farm.height(), 0};
-  for (std::size_t y = 0; y < farm.height(); ++y) {
-    for (std::size_t x = 0; x < farm.length(); ++x) {
+  for (int y = 0; y < farm.height(); ++y) {
+    for (int x = 0; x < farm.length(); ++x) {
       if (is_in_region.at(x, y) == 0) {
         Region region = get_region({x, y}, farm);
         std::ranges::for_each(region, [&](const auto &val) {
@@ -227,7 +227,7 @@ int get_cost_of_fences_with_bulk_discount(const Farm &farm) {
   for (std::size_t y = 0; y < farm.height(); ++y) {
     for (std::size_t x = 0; x < farm.length(); ++x) {
       if (is_in_region.at(x, y) == 0) {
-        Region region = get_region({x, y}, farm);
+        Region region = get_region({static_cast<int>(x), static_cast<int>(y)}, farm);
         std::ranges::for_each(region, [&](const auto &val) {
           is_in_region.at(val.x, val.y) = 1;
         });
