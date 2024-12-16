@@ -6,36 +6,36 @@
 #include <fstream>
 
 template <class T>
-Array2D::Array2D<T>::Array2D(std::size_t length, std::size_t height,
+array2D::Array2D<T>::Array2D(std::size_t length, std::size_t height,
                              T default_value)
     : length_(length), height_(height) {
   // Initialize empty, '0' doesn't appear
   vec_ = std::vector<T>(length_ * height_, default_value);
 }
 
-template <class T> T &Array2D::Array2D<T>::at(std::size_t x, std::size_t y) {
+template <class T> T &array2D::Array2D<T>::at(std::size_t x, std::size_t y) {
   return vec_.at(y * length_ + x);
 }
-template <class T> const T & Array2D::Array2D<T>::cat(std::size_t x, std::size_t y) const {
+template <class T> const T & array2D::Array2D<T>::cat(std::size_t x, std::size_t y) const {
   return vec_[y * length_ + x];
 }
-template <class T> const std::size_t &Array2D::Array2D<T>::height() const {
+template <class T> const std::size_t &array2D::Array2D<T>::height() const {
   return height_;
 }
-template <class T> const std::size_t &Array2D::Array2D<T>::length() const {
+template <class T> const std::size_t &array2D::Array2D<T>::length() const {
   return length_;
 }
 
-template <class T> void Array2D::print_array(const Array2D<T> &arr){
+template <class T> void array2D::print_array(const Array2D<T> &arr, std::function<char(T)> to_char){
     for (int y = 0; y < arr.height(); ++y) {
     for (int x = 0; x < arr.length(); ++x) {
-      std::cout << arr.cat(x, y);
+      std::cout << to_char(arr.cat(x, y));
     }
     std::cout << "\n";
   }
 }
 
-template <class T> Array2D::Array2D<T> Array2D::read_array(std::string file_location, std::function<T(char)> convert) {
+template <class T> array2D::Array2D<T> array2D::read_array(std::string file_location, std::function<T(char)> convert) {
   std::ifstream input_file;
   input_file.open(file_location);
   if (!input_file.is_open()) {
@@ -45,7 +45,7 @@ template <class T> Array2D::Array2D<T> Array2D::read_array(std::string file_loca
   std::vector<T> elements {};
   std::string line;
   int length = 0, height = 0;
-  while (std::getline(input_file, line)) {
+  while (std::getline(input_file, line) && line != "") {
     ++height;
     length = line.size();
     for(auto iter = line.begin(); iter != line.end(); ++iter){
@@ -57,11 +57,11 @@ template <class T> Array2D::Array2D<T> Array2D::read_array(std::string file_loca
 }
 
 // Explicit instantiation
-template class Array2D::Array2D<char>;
-template class Array2D::Array2D<int>;
+template class array2D::Array2D<char>;
+template class array2D::Array2D<int>;
 
-template void Array2D::print_array(const Array2D<char> &);
-template void Array2D::print_array(const Array2D<int> &);
+template void array2D::print_array(const Array2D<char> &,std::function<char(char)> func);
+template void array2D::print_array(const Array2D<int> &, std::function<char(int)> func);
 
-template Array2D::Array2D<char> Array2D::read_array(std::string, std::function<char(char)>);
-template Array2D::Array2D<int> Array2D::read_array(std::string, std::function<int(char)>);
+template array2D::Array2D<char> array2D::read_array(std::string, std::function<char(char)>);
+template array2D::Array2D<int> array2D::read_array(std::string, std::function<int(char)>);

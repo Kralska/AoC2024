@@ -10,7 +10,7 @@
 #include "array2d.h"
 #include "vector.h"
 
-using Farm = Array2D::Array2D<char>;
+using Farm = array2D::Array2D<char>;
 
 template <class T>
 std::ostream &operator<<(std::ostream &os, const std::set<T> &set) {
@@ -80,7 +80,7 @@ int calculate_circumference(const Region &region) {
 
 int get_cost_of_fences(const Farm &farm) {
   int sum = 0;
-  Array2D::Array2D<int> is_in_region{farm.length(), farm.height(), 0};
+  array2D::Array2D<int> is_in_region{farm.length(), farm.height(), 0};
   for (int y = 0; y < farm.height(); ++y) {
     for (int x = 0; x < farm.length(); ++x) {
       if (is_in_region.at(x, y) == 0) {
@@ -223,7 +223,7 @@ int calculate_sides(const Region& region){
 
 int get_cost_of_fences_with_bulk_discount(const Farm &farm) {
   int sum = 0;
-  Array2D::Array2D<int> is_in_region{farm.length(), farm.height(), 0};
+  array2D::Array2D<int> is_in_region{farm.length(), farm.height(), 0};
   for (std::size_t y = 0; y < farm.height(); ++y) {
     for (std::size_t x = 0; x < farm.length(); ++x) {
       if (is_in_region.at(x, y) == 0) {
@@ -249,7 +249,7 @@ int main(int argc, char **argv) {
   }
 
   // First argument is input file location
-  Farm farm = Array2D::read_array<char>(argv[1], [](char c){return c;});
+  Farm farm = array2D::read_array<char>(argv[1], [](char c){return c;});
   // Farm farm = read_input(argv[1]);
 
   // Task 1 : Correctly ordered pages
