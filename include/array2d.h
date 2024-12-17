@@ -35,7 +35,7 @@ private:
 };
 
 template <class T>
-void print_array(const Array2D<T>&, std::function<char(T)> = [](const auto& v){return v;});
+void print_array(const Array2D<T>&, std::function<std::string(T)> = [](const auto& v){return v;});
 
 template <class T>
 Array2D<T> read_array(std::string, std::function<T(char)>);
