@@ -109,12 +109,12 @@ private:
 };
 
 void print(const TileArray &warehouse) {
-  std::function<char(int)> to_char = [](const int &v) -> char {
-    const static std::map<int, char> tile_to_char{
-        {static_cast<int>(Tile::Wall), '#'},
-        {static_cast<int>(Tile::Robot), '@'},
-        {static_cast<int>(Tile::Box), 'O'},
-        {static_cast<int>(Tile::Empty), ' '},
+  std::function<std::string(int)> to_char = [](const int &v) -> std::string {
+    const static std::map<int, std::string> tile_to_char{
+        {static_cast<int>(Tile::Wall), "#"},
+        {static_cast<int>(Tile::Robot), "@"},
+        {static_cast<int>(Tile::Box), "O"},
+        {static_cast<int>(Tile::Empty), " "},
     };
     return tile_to_char.at(v);
   };
