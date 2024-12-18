@@ -8,6 +8,8 @@ include_directories(include/)
 
 add_library(array2d STATIC array2d.cpp)
 add_library(vector STATIC vector.cpp)
+add_library(shortest_path STATIC shortest_path.cpp)
+
 
 add_executable(day01 day01.cpp)
 add_executable(day02 day02.cpp)
@@ -26,3 +28,5 @@ target_link_libraries(day15 array2d)
 add_executable(day16 day16.cpp)
 target_link_libraries(day16 array2d)
 add_executable(day17 day17.cpp)
+add_executable(day18 day18.cpp)
+target_link_libraries(day18 PRIVATE shortest_path array2d)

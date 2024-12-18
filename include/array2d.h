@@ -11,6 +11,7 @@ namespace array2D {
 
 template <class T> class Array2D {
 public:
+  Array2D(const Array2D<T>&);
   Array2D(std::size_t length, std::size_t height, T default_value = {});
   Array2D(std::size_t length, std::size_t height,
           std::ranges::input_range auto &&range) : Array2D(length, height) {

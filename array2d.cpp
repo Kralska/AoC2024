@@ -5,6 +5,8 @@
 #include <functional>
 #include <iostream>
 
+template <class T>
+array2D::Array2D<T>::Array2D(const array2D::Array2D<T>& arr) : Array2D(arr.length(), arr.height(), arr.vec_) {}
 
 template <class T>
 array2D::Array2D<T>::Array2D(std::size_t length, std::size_t height,
