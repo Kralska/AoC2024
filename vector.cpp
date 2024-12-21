@@ -14,3 +14,13 @@ vector::Vector& vector::Vector::operator+=(const Vector& other) {
   y += other.y;
   return *this;
 }
+
+vector::Vector vector::Vector::operator/(int i) const {
+  return {x / i, y / i};
+}
+
+vector::Vector& vector::Vector::operator/=(int i) {
+  x /= i;
+  y /= i;
+  return *this;
+}

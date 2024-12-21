@@ -59,13 +59,13 @@ void paths::Dijkstra::calculate_shortest_paths(Point from) {
   }
 }
 
-std::vector<paths::Point> paths::Dijkstra::get_shortest_path(Point to) {
+std::vector<paths::Point> paths::Dijkstra::get_shortest_path(Point to) const {
   std::vector<Point> rpath{to};
   Point current = to;
   while(current != from_){
     auto neighbors = get_neighbors(current);
     for(const auto& neighbor : neighbors){
-      if(costs_.at(current.x, current.y) - 1 == costs_.at(neighbor.x, neighbor.y)){
+      if(costs_.cat(current.x, current.y) - 1 == costs_.cat(neighbor.x, neighbor.y)){
         rpath.push_back(neighbor);
         current = neighbor;
         break;
@@ -86,6 +86,6 @@ bool paths::Dijkstra::is_wall_at(std::size_t x, std::size_t y) {
   return maze_.cat(x, y) != 0;
 }
 
-int paths::Dijkstra::get_shortest_path_length(Point to) {
-  return costs_.at(to.x, to.y);
+int paths::Dijkstra::get_shortest_path_length(Point to) const{
+  return costs_.cat(to.x, to.y);
 }

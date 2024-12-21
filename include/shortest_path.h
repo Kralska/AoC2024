@@ -16,8 +16,8 @@ public:
   Dijkstra(const array2D::Array2D<int>&, Point from);
 
   void calculate_shortest_paths(Point from);
-  std::vector<Point> get_shortest_path(Point to);
-  int get_shortest_path_length(Point to);
+  std::vector<Point> get_shortest_path(Point to) const;
+  int get_shortest_path_length(Point to) const;
   std::vector<Point> get_shortest_path(Point from, Point to);
   
 
